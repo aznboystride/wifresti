@@ -104,8 +104,35 @@ def main():
                                                    
 
                                         
-                if entrada == mac:
-                        print "Coming soon"
+                while entrada == mac and platform.system() == "Darwin":
+                        
+                        print " "
+                        print "Insert the network name , or press (a) to see information about all networks."
+                        print " "
+                        nombre = raw_input("> ")
+                        if nombre == "a":
+                                print "\033[1;36m############################ - Information about all networks - ############################\033[1;m"                        	
+                                command = "defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist | grep SSIDString"
+                                proc = subprocess.Popen(command,stdout=subprocess.PIPE,shell=True)
+                                (out, err) = proc.communicate()
+                                outwithoutreturn = out.replace("SSIDString = ", "").strip('\n').strip()
+                                temp = outwithoutreturn.split('\n')
+                                outwithoutreturn = ""
+                                for line in temp:
+                                        outwithoutreturn += line.strip()+'\n'
+                                wifi0 = outwithoutreturn
+                                print wifi0
+                                print "\033[1;36m############################################################################################\033[1;m"                                
+                        else:
+                                print "\033[1;36m###################################### - " + nombre + " - ######################################\033[1;m"
+                                print " "
+
+                                wifi0 = os.system("security find-generic-password -D \"AirPort network password\" -a %s -g | grep password:" % nombre)
+                                print " "
+                                print "\033[1;36m#############################################################################################\033[1;m"
+                                print " "
+
+
 
                 else:
                         print "Please select an option . (1) for linux , (2) for windows , and (3) for Mac OS ."
